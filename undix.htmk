@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منظمة-MNB-</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #00ff00;
+            --secondary: #008800;
+            --dark: #001100;
+            --darker: #000800;
+            --danger: #ff0000;
+            --warning: #ffff00;
+            --info: #0088ff;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark), var(--darker));
+            color: var(--primary);
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        /* الهيدر */
+        .header {
+            background: rgba(0, 255, 0, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--primary);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* التنقل */
+        .nav-tabs {
+            display: flex;
+            background: rgba(0, 255, 0, 0.05);
+            border-radius: 10px;
+            padding: 5px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: var(--dark);
+            font-weight: bold;
+        }
+
+        /* الكروت */
+        .card {
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid var(--secondary);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--secondary);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        /* الإحصائيات */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stat-item {
+            background: rgba(0, 255, 0, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--secondary);
+        }
+
+        .stat-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 5px 0;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* قائمة الأعضاء */
+        .members-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .member-item {
+            background: rgba(0, 255, 0, 0.05);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .member-item:hover {
+            background: rgba(0, 255, 0, 0.1);
+            transform: translateX(-5px);
+        }
+
+        .member-info {
+            flex: 1;
+        }
+
+        .member-name {
+            font-weight: bold;
+            margin-bottom: 3px;
+            font-size: 1.1rem;
+        }
+
+        .member-role {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .member-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+
+        .member-status.offline {
+            background: var(--danger);
+        }
+
+        .member-status.busy {
+            background: var(--warning);
+        }
+
+        /* المهام */
+        .tasks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .task-item {
+            background: rgba(0, 255, 0, 0.05);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--secondary);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .task-title {
+            font-weight: bold;
+        }
+
+        .task-assignee {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .task-progress {
+            height: 6px;
+            background: rgba(0, 255, 0, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .task-progress-bar {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        .task-timer {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            text-align: center;
+        }
+
+        /* الإنذارات */
+        .alert-item {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid var(--danger);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .alert-title {
+            color: var(--danger);
+            font-weight: bold;
+        }
+
+        .alert-time {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* الأزرار */
+        .btn {
+            background: var(--primary);
+            color: var(--dark);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .btn:hover {
+            background: #00cc00;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: var(--dark);
+        }
+
+        /* المحفظة */
+        .wallet-balance {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 15px 0;
+            color: var(--primary);
+        }
+
+        .transaction-item {
+            background: rgba(0, 255, 0, 0.05);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid var(--secondary);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .transaction-amount {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* الأدوات */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .tool-item {
+            background: rgba(0, 255, 0, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tool-item:hover {
+            background: rgba(0, 255, 0, 0.1);
+            transform: scale(1.05);
+        }
+
+        .tool-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        /* النوافذ المنبثقة */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: var(--darker);
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 20px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--danger);
+            background: rgba(0,0,0,0.5);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* تفاصيل العضو */
+        .member-details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .detail-card {
+            background: rgba(0, 255, 0, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--secondary);
+            text-align: center;
+        }
+
+        .detail-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        .detail-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .hacks-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin: 10px 0;
+        }
+
+        .hack-item {
+            background: rgba(0, 255, 0, 0.05);
+            padding: 8px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            border-left: 3px solid var(--primary);
+        }
+
+        /* التكيف مع الشاشات الصغيرة */
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tab {
+                font-size: 0.8rem;
+                padding: 8px 5px;
+            }
+
+            .member-details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* شريط البحث */
+        .search-box {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid var(--secondary);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: var(--primary);
+            width: 100%;
+            padding: 5px;
+            font-size: 1rem;
+        }
+
+        .search-box input::placeholder {
+            color: rgba(0, 255, 0, 0.5);
+        }
+
+        .search-box input:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- الهيدر -->
+        <div class="header">
+            <h1>منظمة - MNB</h1>
+            <div class="status-bar">
+                <span>MNB - رئيس المنظمة</span>
+                <span id="currentTime">--:--:--</span>
+                <span>🟢 متصل</span>
+            </div>
+        </div>
+
+        <!-- التنقل -->
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="showTab('dashboard')">اللوحة الرئيسية</div>
+            <div class="nav-tab" onclick="showTab('members')">الأعضاء</div>
+            <div class="nav-tab" onclick="showTab('missions')">المهام</div>
+            <div class="nav-tab" onclick="showTab('wallet')">المحفظة</div>
+            <div class="nav-tab" onclick="showTab('tools')">الأدوات</div>
+        </div>
+
+        <!-- اللوحة الرئيسية -->
+        <div id="dashboard" class="tab-content">
+            <!-- الإحصائيات -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">📊 إحصائيات المنظمة</div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">إجمالي الاختراقات</div>
+                        <div class="stat-value">8360</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">القيمة الإجمالية</div>
+                        <div class="stat-value">₿ 63.00038</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">مهام نشطة</div>
+                        <div class="stat-value">13</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">معدل النجاح</div>
+                        <div class="stat-value">96%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- الإنذارات -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🚨 الإنذارات الأمنية</div>
+                </div>
+                <div class="alert-item">
+                    <div class="alert-header">
+                        <div class="alert-title">كشف محاولة تتبع</div>
+                        <div class="alert-time">منذ 5 دقائق</div>
+                    </div>
+                    <div>تم كشف محاولة تتبع من وكالة الأمن القومي - تم تحييد التهديد</div>
+                </div>
+                <div class="alert-item">
+                    <div class="alert-header">
+                        <div class="alert-title">اختراق ناجح</div>
+                        <div class="alert-time">منذ 12 دقيقة</div>
+                    </div>
+                    <div>PHANTOM أكمل اختراق الخوادم الحكومية بنجاح</div>
+                </div>
+            </div>
+
+            <!-- الأعضاء النشطين -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">👥 الأعضاء النشطين حالياً</div>
+                </div>
+                <div class="members-list" id="activeMembers">
+                    <!-- سيتم ملء هذه القائمة بالجافاسكريبت -->
+                </div>
+            </div>
+        </div>
+
+        <!-- الأعضاء -->
+        <div id="members" class="tab-content" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">👥 إدارة أعضاء المنظمة</div>
+                </div>
+                
+                <div class="search-box">
+                    <input type="text" id="memberSearch" placeholder="🔍 بحث عن عضو..." onkeyup="filterMembers()">
+                </div>
+                
+                <div class="members-list" id="allMembers">
+                    <!-- سيتم ملء هذه القائمة بالجافاسكريبت -->
+                </div>
+            </div>
+        </div>
+
+        <!-- المهام -->
+        <div id="missions" class="tab-content" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🎯 المهام النشطة</div>
+                </div>
+                <div class="tasks-list" id="missionsList">
+                    <!-- سيتم ملء هذه القائمة بالجافاسكريبت -->
+                </div>
+                <button class="btn" onclick="assignNewMission()">➕ تعيين مهمة جديدة</button>
+            </div>
+        </div>
+
+        <!-- المحفظة -->
+        <div id="wallet" class="tab-content" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">💰 المحفظة الرقمية</div>
+                </div>
+                <div class="wallet-balance">₿ 63.00038</div>
+                <div class="card-title">آخر المعاملات</div>
+                <div id="transactionsList">
+                    <!-- سيتم ملء هذه القائمة بالجافاسكريبت -->
+                </div>
+            </div>
+        </div>
+
+        <!-- الأدوات -->
+        <div id="tools" class="tab-content" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🛠️ أدوات الهاكرز</div>
+                </div>
+                <div class="tools-grid">
+                    <div class="tool-item" onclick="runTool('portScanner')">
+                        <div class="tool-icon">🔍</div>
+                        <div>مسح المنافذ</div>
+                    </div>
+                    <div class="tool-item" onclick="runTool('ddos')">
+                        <div class="tool-icon">⚡</div>
+                        <div>هجوم DDoS</div>
+                    </div>
+                    <div class="tool-item" onclick="runTool('decrypt')">
+                        <div class="tool-icon">🔓</div>
+                        <div>فك التشفير</div>
+                    </div>
+                    <div class="tool-item" onclick="runTool('network')">
+                        <div class="tool-icon">🌐</div>
+                        <div>اختراق الشبكات</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة تفاصيل العضو -->
+    <div id="memberModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('memberModal')">&times;</span>
+            <div id="memberDetails">
+                <!-- سيتم ملء هذه التفاصيل بالجافاسكريبت -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // بيانات الأعضاء
+        const members = [
+            { 
+                id: 1, 
+                name: "MNB", 
+                role: "القائد والرئيس", 
+                status: "online", 
+                hacks: 0, 
+                specialty: "الإدارة والتخطيط", 
+                successRate: "100%",
+                joinDate: "2022-01-15",
+                skills: ["القيادة", "التخطيط الاستراتيجي", "إدارة المخاطر"],
+                currentMission: "إشراف عام"
+            },
+            { 
+                id: 2, 
+                name: "PHANTOM", 
+                role: "اختراق الأنظمة الحكومية", 
+                status: "online", 
+                hacks: 324, 
+                specialty: "الأنظمة الحكومية", 
+                successRate: "98%",
+                joinDate: "2022-03-20",
+                skills: ["اختراق الخوادم", "استغلال الثغرات", "التخفي"],
+                currentMission: "اختراق البنك المركزي الأوروبي",
+                recentHacks: ["وزارة الدفاع الأمريكية", "البنتاغون", "فعل أي أمر من عند رئيس MNB"]
+            },
+            { 
+                id: 3, 
+                name: "SHADOW", 
+                role: "التجسس الرقمي", 
+                status: "online", 
+                hacks: 287, 
+                specialty: "التجسس والمراقبة", 
+                successRate: "95%",
+                joinDate: "2022-02-10",
+                skills: ["المراقبة الإلكترونية", "اعتراض الاتصالات", "التنصت"],
+                currentMission: "مراقبة اتصالات دبلوماسية",
+                recentHacks: [" رئيس قسم مبيعات DARK WEB", "مقر الأمم المتحدة", "الاتحاد الأوروبي"]
+            },
+            { 
+                id: 4, 
+                name: "SPECTRE", 
+                role: "التخفي وإخفاء الهوية", 
+                status: "busy", 
+                hacks: 156, 
+                specialty: "التخفي الرقمي", 
+                successRate: "99%",
+                joinDate: "2022-04-05",
+                skills: ["إخفاء الهوية", "تشويش التتبع", "إنشاء هويات مزيفة"],
+                currentMission: "حماية هويات الفريق",
+                recentHacks: ["شبكة تور", "الإنترنت المظلم", "شبكات VPN آمنة"]
+            },
+            { 
+                id: 5, 
+                name: "REAPER", 
+                role: "الهجمات الإلكترونية", 
+                status: "online", 
+                hacks: 412, 
+                specialty: "الهجمات المباشرة", 
+                successRate: "94%",
+                joinDate: "2022-01-30",
+                skills: ["هجمات DDoS", "حقن SQL", "هندسة اجتماعية"],
+                currentMission: "هجوم على شركة تقنية",
+                recentHacks: ["شركة مايكروسوفت", "أمازون ويب سيرفيس", "شبكة جوجل"]
+            },
+            { 
+                id: 6, 
+                name: "GHOST", 
+                role: "التسلل للشبكات", 
+                status: "offline", 
+                hacks: 198, 
+                specialty: "شبكات الشركات", 
+                successRate: "96%",
+                joinDate: "2022-05-15",
+                skills: ["تسلل الشبكات", "اختراق الواي فاي", "هندسة الشبكات"],
+                currentMission: "غير متاح",
+                recentHacks: ["شبكة آبل الداخلية", "فيسبوك للموظفين", "نتفليكس الداخلية"]
+            },
+            { 
+                id: 7, 
+                name: "CYPHER", 
+                role: "فك التشفير", 
+                status: "online", 
+                hacks: 89, 
+                specialty: "التشفير والشفرات", 
+                successRate: "92%",
+                joinDate: "2022-06-20",
+                skills: ["فك التشفير", "تحليل الشفرات", "رياضيات التشفير"],
+                currentMission: "فك تشفير قاعدة بيانات",
+                recentHacks: ["تشفير AES-256", "شفرات الجيش", "قواعد البيانات المشفرة"]
+            },
+            { 
+                id: 8, 
+                name: "VENOM", 
+                role: "البرمجيات الضارة", 
+                status: "online", 
+                hacks: 234, 
+                specialty: "تطوير البرمجيات", 
+                successRate: "97%",
+                joinDate: "2023-03-12",
+                skills: ["برمجة الفيروسات", "تطوير التروجان", "هندسة عكسية"],
+                currentMission: "تطوير برمجية خبيثة جديدة",
+                recentHacks: ["أنظمة ويندوز", "خوادم لينكس", "أجهزة Android"]
+            },
+            { 
+                id: 9, 
+                name: "NEXUS", 
+                role: "الاتصالات المشفرة", 
+                status: "offline", 
+                hacks: 67, 
+                specialty: "الاتصالات الآمنة", 
+                successRate: "93%",
+                joinDate: "2022-10-08",
+                skills: ["الاتصالات المشفرة", "بروتوكولات آمنة", "شبكات لا سلكية"],
+                currentMission: "غير متاح",
+                recentHacks: ["شبكات الجيش", "اتصالات الأقمار الصناعية", "شبكات الطوارئ"]
+            },
+            { 
+                id: 10, 
+                name: "ZERO", 
+                role: "محو الآثار", 
+                status: "online", 
+                hacks: 178, 
+                specialty: "الأمن الرقمي", 
+                successRate: "99%",
+                joinDate: "2024-04-25",
+                skills: ["محو الأدلة", "تأمين البيانات", "مكافحة التتبع"],
+                currentMission: "تنظيف آثار عملية سابقة",
+                recentHacks: ["سجلات الخوادم", "بيانات المراقبة", "سجلات الشبكات"]
+            }
+        ];
+
+        // بيانات المهام
+        const missions = [
+            { id: 1, title: "اختراق البنك المركزي الأوروبي", assignee: "PHANTOM", progress: 75, timeLeft: "02:15:00", priority: "high" },
+            { id: 2, title: "  إختراق بنك إسرائيلي", assignee: "SHADOW", progress: 40, timeLeft: "04:30:00", priority: "medium" },
+            { id: 3, title: "   إختراق شخص من أمر MNB و تهديده و طلب منه فدية", assignee: "VENOM", progress: 60, timeLeft: "01:45:00", priority: "high" },
+            { id: 4, title: "فك تشفير قاعدة بيانات", assignee: "CYPHER", progress: 85, timeLeft: "00:30:00", priority: "medium" },
+            { id: 5, title: "هجوم على شركة تقنية كبرى", assignee: "REAPER", progress: 25, timeLeft: "06:20:00", priority: "high" }
+        ];
+
+        // بيانات المعاملات
+        const transactions = [
+            { id: 1, description: "اختراق بنك سويسرا", amount: 6.0039, date: "2025-10-15", type: "income" },
+            { id: 2, description: "اختراق شركة نفط", amount: 1.09, date: "2025-11-14", type: "income" },
+            { id: 3, description: "بيع بيانات مسروقة", amount: 0.7, date: "2023-10-13", type: "income" },
+            { id: 4, description: " دفع عقاب", amount: -10.00, date: "2025-11-28", type: "expense" },
+            { id: 5, description: "اختراق شبكة اتصالات", amount: 13.07, date: "2023-10-11", type: "income" }
+        ];
+
+        // تحديث الوقت
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString('ar-EG');
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // إظهار/إخفاء التبويبات
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabName).style.display = 'block';
+            event.target.classList.add('active');
+        }
+
+        // تحميل الأعضاء النشطين
+        function loadActiveMembers() {
+            const activeMembersList = document.getElementById('activeMembers');
+            activeMembersList.innerHTML = '';
+            
+            const activeMembers = members.filter(member => member.status === 'online' && member.id !== 1);
+            
+            activeMembers.forEach(member => {
+                const memberItem = document.createElement('div');
+                memberItem.className = 'member-item';
+                memberItem.innerHTML = `
+                    <div class="member-info">
+                        <div class="member-name">${member.name}</div>
+                        <div class="member-role">${member.role}</div>
+                        <div style="font-size: 0.7rem; opacity: 0.6;">${member.currentMission}</div>
+                    </div>
+                    <div class="member-status"></div>
+                `;
+                memberItem.onclick = () => showMemberDetails(member.id);
+                activeMembersList.appendChild(memberItem);
+            });
+        }
+
+        // تحميل جميع الأعضاء
+        function loadAllMembers() {
+            const allMembersList = document.getElementById('allMembers');
+            allMembersList.innerHTML = '';
+            
+            members.forEach(member => {
+                if (member.id !== 1) { // استبعاد القائد MNB
+                    const memberItem = document.createElement('div');
+                    memberItem.className = 'member-item';
+                    memberItem.innerHTML = `
+                        <div class="member-info">
+                            <div class="member-name">${member.name}</div>
+                            <div class="member-role">${member.role}</div>
+                            <div style="font-size: 0.7rem; opacity: 0.6;">اختراقات: ${member.hacks} | نجاح: ${member.successRate}</div>
+                        </div>
+                        <div class="member-status ${member.status === 'offline' ? 'offline' : ''} ${member.status === 'busy' ? 'busy' : ''}"></div>
+                    `;
+                    memberItem.onclick = () => showMemberDetails(member.id);
+                    allMembersList.appendChild(memberItem);
+                }
+            });
+        }
+
+        // تصفية الأعضاء
+        function filterMembers() {
+            const searchTerm = document.getElementById('memberSearch').value.toLowerCase();
+            const memberItems = document.querySelectorAll('#allMembers .member-item');
+            
+            memberItems.forEach(item => {
+                const memberName = item.querySelector('.member-name').textContent.toLowerCase();
+                const memberRole = item.querySelector('.member-role').textContent.toLowerCase();
+                
+                if (memberName.includes(searchTerm) || memberRole.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // تحميل قائمة المهام
+        function loadMissions() {
+            const missionsList = document.getElementById('missionsList');
+            missionsList.innerHTML = '';
+            
+            missions.forEach(mission => {
+                const priorityColor = mission.priority === 'high' ? 'var(--danger)' : 
+                                    mission.priority === 'medium' ? 'var(--warning)' : 'var(--primary)';
+                
+                const taskItem = document.createElement('div');
+                taskItem.className = 'task-item';
+                taskItem.innerHTML = `
+                    <div class="task-header">
+                        <div class="task-title">${mission.title}</div>
+                        <div class="task-assignee">${mission.assignee}</div>
+                    </div>
+                    <div class="task-progress">
+                        <div class="task-progress-bar" style="width: ${mission.progress}%; background: ${priorityColor};"></div>
+                    </div>
+                    <div class="task-timer">⏰ ${mission.timeLeft} | أولوية: <span style="color: ${priorityColor}">${mission.priority === 'high' ? 'عالية' : 'متوسطة'}</span></div>
+                `;
+                missionsList.appendChild(taskItem);
+            });
+        }
+
+        // تحميل المعاملات
+        function loadTransactions() {
+            const transactionsList = document.getElementById('transactionsList');
+            transactionsList.innerHTML = '';
+            
+            transactions.forEach(transaction => {
+                const transactionItem = document.createElement('div');
+                transactionItem.className = 'transaction-item';
+                const amountColor = transaction.type === 'income' ? 'var(--primary)' : 'var(--danger)';
+                const amountSign = transaction.type === 'income' ? '+' : '';
+                
+                transactionItem.innerHTML = `
+                    <div>
+                        <div>${transaction.description}</div>
+                        <div style="font-size: 0.8rem; opacity: 0.7;">${transaction.date}</div>
+                    </div>
+                    <div class="transaction-amount" style="color: ${amountColor}">${amountSign}₿ ${transaction.amount}</div>
+                `;
+                transactionsList.appendChild(transactionItem);
+            });
+        }
+
+        // إظهار تفاصيل العضو
+        function showMemberDetails(memberId) {
+            const member = members.find(m => m.id === memberId);
+            const modal = document.getElementById('memberModal');
+            const details = document.getElementById('memberDetails');
+            
+            let statusColor = 'var(--primary)';
+            let statusText = '🟢 متصل';
+            if (member.status === 'offline') {
+                statusColor = 'var(--danger)';
+                statusText = '🔴 غير متصل';
+            } else if (member.status === 'busy') {
+                statusColor = 'var(--warning)';
+                statusText = '🟡 مشغول';
+            }
+            
+            let hacksHTML = '';
+            if (member.recentHacks) {
+                hacksHTML = `
+                    <div style="margin-top: 15px;">
+                        <div class="card-title">آخر الاختراقات</div>
+                        <div class="hacks-list">
+                            ${member.recentHacks.map(hack => `<div class="hack-item">${hack}</div>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            let skillsHTML = '';
+            if (member.skills) {
+                skillsHTML = `
+                    <div style="margin-top: 15px;">
+                        <div class="card-title">المهارات</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                            ${member.skills.map(skill => `<div style="background: rgba(0,255,0,0.1); padding: 5px 10px; border-radius: 15px; font-size: 0.8rem;">${skill}</div>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            details.innerHTML = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <h2 style="color: var(--primary); margin-bottom: 5px;">${member.name}</h2>
+                    <div style="color: ${statusColor};">${statusText}</div>
+                </div>
+                
+                <div class="member-details-grid">
+                    <div class="detail-card">
+                        <div class="detail-label">الدور</div>
+                        <div class="detail-value">${member.role}</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-label">التخصص</div>
+                        <div class="detail-value">${member.specialty}</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-label">الاختراقات</div>
+                        <div class="detail-value">${member.hacks}</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-label">معدل النجاح</div>
+                        <div class="detail-value">${member.successRate}</div>
+                    </div>
+                </div>
+                
+                <div style="margin: 15px 0; padding: 10px; background: rgba(0,255,0,0.1); border-radius: 8px;">
+                    <strong>المهمة الحالية:</strong> ${member.currentMission}<br>
+                    <strong>تاريخ الانضمام:</strong> ${member.joinDate}
+                </div>
+                
+                ${skillsHTML}
+                ${hacksHTML}
+                
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+                    <button class="btn" onclick="assignMissionToMember(${memberId})">🎯 تعيين مهمة جديدة</button>
+                    <button class="btn btn-warning" onclick="sendMessageToMember(${memberId})">✉️ إرسال رسالة</button>
+                    <button class="btn btn-danger" onclick="sendAlertToMember(${memberId})">🚨 إرسال إنذار</button>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        // إغلاق النافذة المنبثقة
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // تعيين مهمة جديدة
+        function assignNewMission() {
+            alert('سيتم فتح نافذة تعيين مهمة جديدة...');
+            // يمكن إضافة منطق أكثر تعقيداً هنا
+        }
+
+        // تعيين مهمة لعضو محدد
+        function assignMissionToMember(memberId) {
+            const member = members.find(m => m.id === memberId);
+            const missionName = prompt(`أدخل اسم المهمة الجديدة لـ ${member.name}:`);
+            if (missionName) {
+                alert(`تم تعيين المهمة "${missionName}" لـ ${member.name}`);
+            }
+        }
+
+        // إرسال رسالة لعضو
+        function sendMessageToMember(memberId) {
+            const member = members.find(m => m.id === memberId);
+            const message = prompt(`أدخل الرسالة لـ ${member.name}:`);
+            if (message) {
+                alert(`تم إرسال الرسالة لـ ${member.name}`);
+            }
+        }
+
+        // إرسال إنذار لعضو
+        function sendAlertToMember(memberId) {
+            const member = members.find(m => m.id === memberId);
+            alert(`تم إرسال إنذار عاجل لـ ${member.name}`);
+        }
+
+        // تشغيل أداة
+        function runTool(toolName) {
+            const toolNames = {
+                'portScanner': 'مسح المنافذ',
+                'ddos': 'هجوم DDoS',
+                'decrypt': 'فك التشفير',
+                'network': 'اختراق الشبكات'
+            };
+            
+            const tool = toolNames[toolName];
+            alert(`جاري تشغيل أداة ${tool}...\n\nمحاكاة عملية ${tool} قيد التقدم...`);
+            
+            // محاكاة عملية التحميل
+            setTimeout(() => {
+                alert(`✅ اكتملت عملية ${tool} بنجاح!\n\nتم الحصول على البيانات المطلوبة.`);
+            }, 2000);
+        }
+
+        // التهيئة الأولية
+        document.addEventListener('DOMContentLoaded', function() {
+            loadActiveMembers();
+            loadAllMembers();
+            loadMissions();
+            loadTransactions();
+        });
+
+        // إغلاق النوافذ المنبثقة بالنقر خارجها
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
